@@ -52,11 +52,13 @@ public class AppointmentController {
 
     @PostMapping("/appointment")
     public ResponseEntity<List<Appointment>> createAppointment(@RequestBody Appointment appointment) {
-        List<Appointment> appointments = appointmentRepository.findAll();
-
-        if (!appointment.getFinishesAt().isAfter(appointment.getStartsAt())) {
+        if (appointment.getPatient() == null || appointment.getDoctor() == null
+                || appointment.getRoom() == null || appointment.getStartsAt() == null
+                || appointment.getFinishesAt() == null || !appointment.getFinishesAt().isAfter(appointment.getStartsAt())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        List<Appointment> appointments = appointmentRepository.findAll();
 
         if (appointments.stream().anyMatch(appointment::overlaps)) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
