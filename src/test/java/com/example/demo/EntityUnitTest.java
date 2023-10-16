@@ -54,7 +54,7 @@ class EntityUnitTest {
 
         List<Doctor> doctors = entityManager.getEntityManager().createNativeQuery("SELECT * FROM doctors", Doctor.class).getResultList();
 
-        Assertions.assertEquals(doctors.size(), 1);
+        Assertions.assertEquals(1, doctors.size());
         Assertions.assertEquals(doctors.get(0).getId(), d1.getId());
         Assertions.assertEquals(doctors.get(0).getFirstName(), d1.getFirstName());
         Assertions.assertEquals(doctors.get(0).getLastName(), d1.getLastName());
@@ -69,7 +69,7 @@ class EntityUnitTest {
 
         List<Patient> patients = entityManager.getEntityManager().createNativeQuery("SELECT * FROM patient", Patient.class).getResultList();
 
-        Assertions.assertEquals(patients.size(), 1);
+        Assertions.assertEquals(1, patients.size());
         Assertions.assertEquals(patients.get(0).getId(), p1.getId());
         Assertions.assertEquals(patients.get(0).getFirstName(), p1.getFirstName());
         Assertions.assertEquals(patients.get(0).getFirstName(), p1.getFirstName());
@@ -85,7 +85,7 @@ class EntityUnitTest {
 
         List<Room> rooms = entityManager.getEntityManager().createNativeQuery("SELECT * FROM room", Room.class).getResultList();
 
-        Assertions.assertEquals(rooms.size(), 1);
+        Assertions.assertEquals(1, rooms.size());
         Assertions.assertEquals(rooms.get(0).getRoomName(), r1.getRoomName());
     }
 
@@ -97,7 +97,7 @@ class EntityUnitTest {
 
         List<Appointment> appointments = entityManager.getEntityManager().createNativeQuery("SELECT * FROM Appointment", Appointment.class).getResultList();
 
-        Assertions.assertEquals(appointments.size(), 3);
+        Assertions.assertEquals(3, appointments.size());
         Assertions.assertEquals(a1.getPatient(), p1);
         Assertions.assertEquals(a1.getDoctor(), d1);
         Assertions.assertEquals(a1.getRoom(), r1);
