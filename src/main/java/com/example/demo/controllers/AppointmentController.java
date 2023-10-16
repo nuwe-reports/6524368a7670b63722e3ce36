@@ -57,13 +57,13 @@ public class AppointmentController {
         }
 
         List<Appointment> appointments = appointmentRepository.findAll();
-
-        if (appointments.stream().anyMatch(appointment::overlaps)) {
+        if (isOverlapping(appointments, appointment)) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
 
         appointmentRepository.save(appointment);
         appointments.add(appointment);
+
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
 
@@ -86,6 +86,10 @@ public class AppointmentController {
     public ResponseEntity<HttpStatus> deleteAllAppointments(){
         appointmentRepository.deleteAll();
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private boolean isOverlapping(List<Appointment> appointments, Appointment appointment) {
+        return appointments.stream().anyMatch(appointment::overlaps);
     }
 
     private boolean isInvalidRequest(Appointment appointment) {
