@@ -52,9 +52,7 @@ public class AppointmentController {
 
     @PostMapping("/appointment")
     public ResponseEntity<List<Appointment>> createAppointment(@RequestBody Appointment appointment) {
-        if (appointment.getPatient() == null || appointment.getDoctor() == null
-                || appointment.getRoom() == null || appointment.getStartsAt() == null
-                || appointment.getFinishesAt() == null || !appointment.getFinishesAt().isAfter(appointment.getStartsAt())) {
+        if (isInvalidRequest(appointment)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -68,7 +66,6 @@ public class AppointmentController {
         appointments.add(appointment);
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
-
 
     @DeleteMapping("/appointments/{id}")
     public ResponseEntity<HttpStatus> deleteAppointment(@PathVariable("id") long id){
@@ -89,6 +86,15 @@ public class AppointmentController {
     public ResponseEntity<HttpStatus> deleteAllAppointments(){
         appointmentRepository.deleteAll();
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private boolean isInvalidRequest(Appointment appointment) {
+        return appointment.getPatient() == null
+                || appointment.getDoctor() == null
+                || appointment.getRoom() == null
+                || appointment.getStartsAt() == null
+                || appointment.getFinishesAt() == null
+                || !appointment.getFinishesAt().isAfter(appointment.getStartsAt());
     }
 
 }
