@@ -48,6 +48,10 @@ class DoctorControllerUnitTest{
     @Autowired
     private ObjectMapper objectMapper;
 
+    private static final String DOCTORS_URL = "/api/doctors";
+    private static final String DOCTOR_URL = "/api/doctor";
+
+
     @Test
     void shouldGetDoctors() throws Exception {
         List<Doctor> doctors = new ArrayList<>();
@@ -56,7 +60,7 @@ class DoctorControllerUnitTest{
 
         when(doctorRepository.findAll()).thenReturn(doctors);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/doctors"))
+        mockMvc.perform(MockMvcRequestBuilders.get(DOCTORS_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(doctors)));
 
@@ -69,7 +73,7 @@ class DoctorControllerUnitTest{
 
         when(doctorRepository.findAll()).thenReturn(doctors);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/doctors"))
+        mockMvc.perform(MockMvcRequestBuilders.get(DOCTORS_URL))
                 .andExpect(status().isNoContent());
 
         verify(doctorRepository, times(1)).findAll();
@@ -80,7 +84,7 @@ class DoctorControllerUnitTest{
         Optional<Doctor> doctor = Optional.of(new Doctor ("Perla", "Amalia", 24, "p.amalia@hospital.accwe"));
         when(doctorRepository.findById(anyLong())).thenReturn(doctor);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/doctors/1"))
+        mockMvc.perform(MockMvcRequestBuilders.get(DOCTORS_URL + "/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(doctor.get())));
 
@@ -92,7 +96,7 @@ class DoctorControllerUnitTest{
         Optional<Doctor> doctor = Optional.empty();
         when(doctorRepository.findById(anyLong())).thenReturn(doctor);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/doctors/1"))
+        mockMvc.perform(MockMvcRequestBuilders.get(DOCTORS_URL + "/1"))
                 .andExpect(status().isNotFound());
 
         verify(doctorRepository, times(1)).findById(anyLong());
@@ -104,7 +108,7 @@ class DoctorControllerUnitTest{
 
         when(doctorRepository.save(any(Doctor.class))).thenReturn(doctor);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/doctor/")
+        mockMvc.perform(MockMvcRequestBuilders.post(DOCTOR_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(doctor)))
                 .andExpect(status().isCreated())
@@ -120,7 +124,7 @@ class DoctorControllerUnitTest{
         when(doctorRepository.findById(anyLong())).thenReturn(doctor);
         doNothing().when(doctorRepository).deleteById(anyLong());
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/doctors/1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete(DOCTORS_URL + "/1"))
                 .andExpect(status().isOk());
 
         verify(doctorRepository, times(1)).findById(anyLong());
@@ -133,7 +137,7 @@ class DoctorControllerUnitTest{
 
         when(doctorRepository.findById(anyLong())).thenReturn(doctor);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/doctors/1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete(DOCTORS_URL + "/1"))
                 .andExpect(status().isNotFound());
 
         verify(doctorRepository, times(1)).findById(anyLong());
@@ -143,7 +147,7 @@ class DoctorControllerUnitTest{
     void shouldDeleteAllDoctors() throws Exception {
         doNothing().when(doctorRepository).deleteAll();
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/doctors"))
+        mockMvc.perform(MockMvcRequestBuilders.delete(DOCTORS_URL))
                 .andExpect(status().isOk());
 
         verify(doctorRepository, times(1)).deleteAll();
@@ -163,6 +167,9 @@ class PatientControllerUnitTest{
     @Autowired
     private ObjectMapper objectMapper;
 
+    private static final String PATIENTS_URL = "/api/patients";
+    private static final String PATIENT_URL = "/api/patient";
+
     @Test
     void shouldGetPatients() throws Exception {
         List<Patient> patients = new ArrayList<>();
@@ -174,7 +181,7 @@ class PatientControllerUnitTest{
 
         when(patientRepository.findAll()).thenReturn(patients);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/patients"))
+        mockMvc.perform(MockMvcRequestBuilders.get(PATIENTS_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(patients)));
 
@@ -186,7 +193,7 @@ class PatientControllerUnitTest{
         List<Patient> patients = new ArrayList<>();
         when(patientRepository.findAll()).thenReturn(patients);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/patients"))
+        mockMvc.perform(MockMvcRequestBuilders.get(PATIENTS_URL))
                 .andExpect(status().isNoContent());
 
         verify(patientRepository, times(1)).findAll();
@@ -198,7 +205,7 @@ class PatientControllerUnitTest{
 
         when(patientRepository.findById(anyLong())).thenReturn(patient);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/patients/1"))
+        mockMvc.perform(MockMvcRequestBuilders.get(PATIENTS_URL + "/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(patient.get())));
 
@@ -210,7 +217,7 @@ class PatientControllerUnitTest{
         Optional<Patient> patient = Optional.empty();
         when(patientRepository.findById(anyLong())).thenReturn(patient);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/patients/1"))
+        mockMvc.perform(MockMvcRequestBuilders.get(PATIENTS_URL + "/1"))
                 .andExpect(status().isNotFound());
 
         verify(patientRepository, times(1)).findById(anyLong());
@@ -221,7 +228,7 @@ class PatientControllerUnitTest{
         Patient patient = new Patient("Jose Luis", "Olaya", 37, "j.olaya@email.com");
         when(patientRepository.save(any(Patient.class))).thenReturn(patient);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/patient")
+        mockMvc.perform(MockMvcRequestBuilders.post(PATIENT_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(patient)))
                 .andExpect(status().isCreated());
@@ -236,7 +243,7 @@ class PatientControllerUnitTest{
         when(patientRepository.findById(anyLong())).thenReturn(patient);
         doNothing().when(patientRepository).deleteById(anyLong());
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/patients/1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete(PATIENTS_URL + "/1"))
                 .andExpect(status().isOk());
 
         verify(patientRepository, times(1)).findById(anyLong());
@@ -249,7 +256,7 @@ class PatientControllerUnitTest{
 
         when(patientRepository.findById(anyLong())).thenReturn(patient);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/patients/1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete(PATIENTS_URL + "/1"))
                 .andExpect(status().isNotFound());
 
         verify(patientRepository, times(1)).findById(anyLong());
@@ -259,7 +266,7 @@ class PatientControllerUnitTest{
     void shouldDeleteAllPatients() throws Exception {
         doNothing().when(patientRepository).deleteAll();
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/patients"))
+        mockMvc.perform(MockMvcRequestBuilders.delete(PATIENTS_URL))
                 .andExpect(status().isOk());
 
         verify(patientRepository, times(1)).deleteAll();
@@ -279,6 +286,9 @@ class RoomControllerUnitTest{
     @Autowired
     private ObjectMapper objectMapper;
 
+    private static final String ROOMS_URL = "/api/rooms";
+    private static final String ROOM_URL = "/api/room";
+
     @Test
     void shouldGetRooms() throws Exception {
         List<Room> rooms = new ArrayList<>();
@@ -290,7 +300,7 @@ class RoomControllerUnitTest{
 
         when(roomRepository.findAll()).thenReturn(rooms);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms"))
+        mockMvc.perform(MockMvcRequestBuilders.get(ROOMS_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(rooms)));
 
@@ -302,7 +312,7 @@ class RoomControllerUnitTest{
         List<Room> rooms = new ArrayList<>();
         when(roomRepository.findAll()).thenReturn(rooms);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms"))
+        mockMvc.perform(MockMvcRequestBuilders.get(ROOMS_URL))
                 .andExpect(status().isNoContent());
 
         verify(roomRepository, times(1)).findAll();
@@ -314,7 +324,7 @@ class RoomControllerUnitTest{
 
         when(roomRepository.findByRoomName(anyString())).thenReturn(room);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/Dermatology"))
+        mockMvc.perform(MockMvcRequestBuilders.get(ROOMS_URL + "/Dermatology"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(room.get())));
 
@@ -326,7 +336,7 @@ class RoomControllerUnitTest{
         Optional<Room> room = Optional.empty();
         when(roomRepository.findByRoomName(anyString())).thenReturn(room);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/rooms/Dermatology"))
+        mockMvc.perform(MockMvcRequestBuilders.get(ROOMS_URL + "/Dermatology"))
                 .andExpect(status().isNotFound());
 
         verify(roomRepository, times(1)).findByRoomName(anyString());
@@ -337,7 +347,7 @@ class RoomControllerUnitTest{
         Room room = new Room("Dermatology");
         when(roomRepository.save(any(Room.class))).thenReturn(room);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/room")
+        mockMvc.perform(MockMvcRequestBuilders.post(ROOM_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(room)))
                 .andExpect(status().isCreated());
@@ -352,7 +362,7 @@ class RoomControllerUnitTest{
         when(roomRepository.findByRoomName(anyString())).thenReturn(room);
         doNothing().when(roomRepository).deleteByRoomName(anyString());
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/rooms/Dermatology"))
+        mockMvc.perform(MockMvcRequestBuilders.delete(ROOMS_URL + "/Dermatology"))
                 .andExpect(status().isOk());
 
         verify(roomRepository, times(1)).findByRoomName(anyString());
@@ -365,7 +375,7 @@ class RoomControllerUnitTest{
 
         when(roomRepository.findById(anyLong())).thenReturn(room);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/rooms/Dermatology"))
+        mockMvc.perform(MockMvcRequestBuilders.delete(ROOMS_URL + "/Dermatology"))
                 .andExpect(status().isNotFound());
 
         verify(roomRepository, times(1)).findByRoomName(anyString());
@@ -375,7 +385,7 @@ class RoomControllerUnitTest{
     void shouldDeleteAllRooms() throws Exception {
         doNothing().when(roomRepository).deleteAll();
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/rooms"))
+        mockMvc.perform(MockMvcRequestBuilders.delete(ROOMS_URL))
                 .andExpect(status().isOk());
 
         verify(roomRepository, times(1)).deleteAll();
