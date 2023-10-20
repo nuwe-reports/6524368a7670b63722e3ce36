@@ -53,18 +53,18 @@ public class AppointmentController {
     @PostMapping("/appointment")
     public ResponseEntity<List<Appointment>> createAppointment(@RequestBody Appointment appointment) {
         if (isInvalidRequest(appointment)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
 
         List<Appointment> appointments = appointmentRepository.findAll();
         if (isOverlapping(appointments, appointment)) {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
 
         appointmentRepository.save(appointment);
         appointments.add(appointment);
 
-        return new ResponseEntity<>(appointments, HttpStatus.OK);
+        return ResponseEntity.ok(appointments);
     }
 
     @DeleteMapping("/appointments/{id}")
