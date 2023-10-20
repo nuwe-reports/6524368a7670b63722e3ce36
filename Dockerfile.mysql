@@ -1,6 +1,5 @@
 FROM mysql:latest
 
 ENV MYSQL_DATABASE=accwe-hospital
-ENV MYSQL_ROOT_PASSWORD=root
 
 EXPOSE 3306
