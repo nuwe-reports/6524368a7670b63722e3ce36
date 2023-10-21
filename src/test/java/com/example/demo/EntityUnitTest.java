@@ -52,6 +52,7 @@ class EntityUnitTest {
     @Test
     void shouldTestDoctorEntityMapping() {
         entityManager.getEntityManager().persist(d1);
+        entityManager.getEntityManager().flush();
 
         String query = "SELECT * FROM doctors";
         List<Doctor> doctors = entityManager.getEntityManager()
@@ -59,40 +60,35 @@ class EntityUnitTest {
                 .getResultList();
 
         assertEquals(1, doctors.size());
-        assertEquals(doctors.get(0).getId(), d1.getId());
-        assertEquals(doctors.get(0).getFirstName(), d1.getFirstName());
-        assertEquals(doctors.get(0).getLastName(), d1.getLastName());
-        assertEquals(doctors.get(0).getAge(), d1.getAge());
-        assertEquals(doctors.get(0).getEmail(), d1.getEmail());
+        assertEquals(doctors.get(0), d1);
     }
 
     @Test
     void shouldTestPatientEntityMapping() {
         entityManager.getEntityManager().persist(p1);
+        entityManager.getEntityManager().flush();
+
         final String query = "SELECT * FROM patient";
         List<Patient> patients = entityManager.getEntityManager()
                 .createNativeQuery(query, Patient.class)
                 .getResultList();
 
         assertEquals(1, patients.size());
-        assertEquals(patients.get(0).getId(), p1.getId());
-        assertEquals(patients.get(0).getFirstName(), p1.getFirstName());
-        assertEquals(patients.get(0).getFirstName(), p1.getFirstName());
-        assertEquals(patients.get(0).getLastName(), p1.getLastName());
-        assertEquals(patients.get(0).getAge(), p1.getAge());
-        assertEquals(patients.get(0).getEmail(), p1.getEmail());
+        assertEquals(patients.get(0), p1);
     }
 
     @Test
     void shouldTestRoomEntityMapping() {
         entityManager.getEntityManager().persist(r1);
+        entityManager.getEntityManager().flush();
+
         final String query = "SELECT * FROM room";
         List<Room> rooms = entityManager.getEntityManager()
                 .createNativeQuery(query, Room.class)
                 .getResultList();
 
         assertEquals(1, rooms.size());
-        assertEquals(rooms.get(0).getRoomName(), r1.getRoomName());
+        assertEquals(rooms.get(0), r1);
     }
 
     @Test
@@ -101,20 +97,18 @@ class EntityUnitTest {
         entityManager.getEntityManager().persist(a2);
         entityManager.getEntityManager().persist(a3);
 
+        entityManager.getEntityManager().flush();
+
+
         final String query = "SELECT * FROM Appointment";
         List<Appointment> appointments = entityManager.getEntityManager()
                 .createNativeQuery(query, Appointment.class)
                 .getResultList();
 
         assertEquals(3, appointments.size());
-        assertEquals(a1.getPatient(), p1);
-        assertEquals(a1.getDoctor(), d1);
-        assertEquals(a1.getRoom(), r1);
-        assertEquals(a2.getPatient(), p1);
-        assertEquals(a2.getDoctor(), d1);
-        assertEquals(a2.getRoom(), r1);
-        assertEquals(a3.getPatient(), p1);
-        assertEquals(a3.getDoctor(), d1);
-        assertEquals(a3.getRoom(), r1);
+        assertEquals(appointments.get(0), a1);
+        assertEquals(appointments.get(1), a2);
+        assertEquals(appointments.get(2), a3);
+
     }
 }
