@@ -93,12 +93,20 @@ public class AppointmentController {
     }
 
     private boolean isInvalidRequest(Appointment appointment) {
-        return appointment.getPatient() == null
-                || appointment.getDoctor() == null
-                || appointment.getRoom() == null
-                || appointment.getStartsAt() == null
-                || appointment.getFinishesAt() == null
-                || !appointment.getFinishesAt().isAfter(appointment.getStartsAt());
+        return isAnyFieldNull(appointment) || !isFinishAfterStart(appointment);
+    }
+
+    private boolean isAnyFieldNull(Appointment appointment) {
+        return  appointment == null ||
+                appointment.getPatient() == null ||
+                appointment.getDoctor() == null ||
+                appointment.getRoom() == null ||
+                appointment.getStartsAt() == null ||
+                appointment.getFinishesAt() == null;
+    }
+
+    private boolean isFinishAfterStart(Appointment appointment) {
+        return appointment.getFinishesAt().isAfter(appointment.getStartsAt());
     }
 
 }
